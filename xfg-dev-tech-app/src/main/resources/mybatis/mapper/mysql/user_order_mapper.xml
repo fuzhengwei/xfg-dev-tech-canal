@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bugstack.xfg.dev.tech.infrastructure.dao.mysql.IMySQLUserOrderDao">
+
+    <resultMap id="dataMap" type="cn.bugstack.xfg.dev.tech.infrastructure.po.UserOrderPO">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_mobile" property="userMobile"/>
+        <result column="sku" property="sku"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="order_id" property="orderId"/>
+        <result column="quantity" property="quantity"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="discount_amount" property="discountAmount"/>
+        <result column="tax" property="tax"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="order_date" property="orderDate"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="uuid" property="uuid"/>
+        <result column="ipv4" property="ipv4"/>
+        <result column="ipv6" property="ipv6"/>
+        <result column="ext_data" property="extData"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="insert" parameterType="cn.bugstack.xfg.dev.tech.infrastructure.po.UserOrderPO">
+        INSERT INTO user_order (user_name, user_id, user_mobile, sku, sku_name,
+        order_id, quantity, unit_price, discount_amount, tax,
+        total_amount, order_date, order_status, is_delete, uuid,
+        ipv4, ipv6, ext_data, update_time, create_time)
+        VALUES (#{userName}, #{userId}, #{userMobile}, #{sku}, #{skuName},
+        #{orderId}, #{quantity}, #{unitPrice}, #{discountAmount}, #{tax},
+        #{totalAmount}, #{orderDate}, #{orderStatus}, #{isDelete}, #{uuid},
+        INET_ATON(#{ipv4}), INET6_ATON(#{ipv6}), #{extData}, now(), now())
+    </select>
+
+    <update id="updateOrderStatusByUserId" parameterType="java.lang.String">
+        UPDATE user_order SET order_status = 1 WHERE user_id = #{userId}
+    </update>
+
+    <select id="selectByUserId" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, user_name, user_id, user_mobile, sku, sku_name,
+        order_id, quantity, unit_price, discount_amount, tax,
+        total_amount, order_date, order_status, is_delete, uuid,
+        ipv4, ipv6, ext_data, update_time, create_time
+        FROM user_order
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>
